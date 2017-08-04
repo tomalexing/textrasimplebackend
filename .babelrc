@@ -1,0 +1,4 @@
+{
+  "presets": ["babili", "stage-0", "latest"],
+  "plugins": ["transform-runtime"]
+}
