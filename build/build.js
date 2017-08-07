@@ -8,9 +8,10 @@ const path = require('path');
 Promise.all([
     transpileJS(),
     copyStatic()
-])
+]).then(_ => Promise.resolve(copyAssets()))
   .then(_ => console.log('Done'))
   .catch(err => console.trace(err.stack))
+  
 const templateData = {
   'VERSION': package.version,   
 };
@@ -30,7 +31,13 @@ function filesWithPatterns (filesPatterns) {
 }
 
 async function copyStatic(){
-    return filesWithPatterns([/\.json$/i, /\.png$/i]).
+    return filesWithPatterns([/\.json$/i, /\.png$/i, , /\.ico$/i, /\.jpe?g$/i]).
+            map( async file => copy(`src/${file}`,`dist/${file}`)).
+            array
+}
+
+async function copyAssets(){
+    return filesWithPatterns([/(?:(assets)\/)(.)+\.js$/i]).
             map( async file => copy(`src/${file}`,`dist/${file}`)).
             array
 
@@ -39,7 +46,7 @@ async function copyStatic(){
 
 async function transpileJS(){
    return filesWithPatterns([/\.js$/i])
-        .map(async file => {console.log(file); return file})
+        .map(async file => { return file})
         .map(async file => ({name: file, contents: await fs.readFile(`src/${file}`)}))
         .map(async file => Object.assign(file, {contents: file.contents.toString('utf-8')}))
         .map(async file => {

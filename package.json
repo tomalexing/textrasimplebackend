@@ -8,13 +8,18 @@
   "scripts": {
     "build-js": "node build/build.js",
     "serve": "nodemon -e js dist/index.js",
-    "dev": "parallelshell \"npm run watch\" \"npm run serve\"",
-    "watch": "npm-watch"
+    "start": "parallelshell \"npm run watch\" \"npm run serve\"",
+    "watch": "npm-watch",
+    "eslint": "eslint ./src/**/*.js"
   },
   "watch": {
     "build-js": {
       "patterns": "src/**/*",
       "extensions": "php,json,js,html,css"
+    },
+    "eslint":{
+      "patterns": "src/**/*",
+      "extensions": "js"
     }
   },
   "dependencies": {
