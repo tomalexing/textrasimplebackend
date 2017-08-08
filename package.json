@@ -1,14 +1,14 @@
 {
   "name": "textraserver",
-  "version": "1.0.0",
+  "version": "1.0.33",
   "description": "SFT",
   "main": "src/index.js",
   "repository": {},
   "license": "MIT",
   "scripts": {
-    "build-js": "node build/build.js",
+    "build-js": "npm version --no-git-tag-version -f patch && node build/build.js",
     "serve": "nodemon -e js dist/index.js",
-    "start": "parallelshell \"npm run watch\" \"npm run serve\"",
+    "start": "npm run build-js",
     "watch": "npm-watch",
     "eslint": "eslint ./src/**/*.js"
   },
@@ -16,20 +16,19 @@
     "build-js": {
       "patterns": "src/**/*",
       "extensions": "php,json,js,html,css"
-    },
-    "eslint":{
-      "patterns": "src/**/*",
-      "extensions": "js"
     }
   },
   "dependencies": {
     "babili": "^0.1.4",
     "body-parser": "^1.17.2",
+    "chokidar": "^1.7.0",
+    "connect-gzip-static": "^2.0.1",
     "express": "^4.15.3",
     "glob": "^7.1.2",
     "mz": "^2.6.0",
     "npm-watch": "^0.2.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "respawn": "^2.5.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

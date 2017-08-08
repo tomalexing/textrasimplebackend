@@ -4,11 +4,17 @@ const glob = require('glob');
 const {AsyncArray} = require('./async_array.js')
 const package = require('./../package.json');
 const path = require('path');
+const respawn = require('respawn');
+var chokidar = require('chokidar');
+ 
+
+console.log("Start building ....")
 
 Promise.all([
     transpileJS(),
     copyStatic()
 ]).then(_ => Promise.resolve(copyAssets()))
+  .then(_ => Promise.resolve(serverStart()))
   .then(_ => console.log('Done'))
   .catch(err => console.trace(err.stack))
   
@@ -16,11 +22,54 @@ const templateData = {
   'VERSION': package.version,   
 };
 
+
 const babelConfig = {
   presets: ["babili", "stage-0", "latest"],
   plugins: ["transform-runtime"]
 };
 
+const paths = {
+  root: path.dirname(__dirname, '..'),
+  serverScripts:{
+    dest: path.resolve(__dirname, '..', 'dist'),
+    src: path.resolve(__dirname, '..', 'src')
+  }
+}
+
+// SETUP FOR SERVER
+const serverProcess = respawn(['node', `${paths.serverScripts.dest}/index.js`]);
+
+//SIGNALs from  
+serverProcess.on('stdout', data => console.log(data.toString('utf-8')));
+serverProcess.on('stderr', data => console.log(data.toString('utf-8')));
+serverProcess.on('warn', data => console.log(data.toString('utf-8')));
+
+process.on('SIGINT', () => {
+  console.log('SIGINT');
+  serverProcess.stop(() => {
+    console.log('serverProcess stop');
+    process.exit();
+  });
+});
+
+process.on('uncaughtException', () => {
+  serverProcess.stop();
+});
+ 
+// END
+
+chokidar.watch(`${paths.serverScripts.src}/index.js`, {ignored: /[\/\\]\./}).on('all', (event, path) => {
+  console.log('Server restart...')
+  Promise.all([
+    transpileJS(),
+    copyStatic()
+  ]).then(_ => Promise.resolve(copyAssets()))
+    .then(_ => Promise.resolve(serverRestart()))
+    .then(_ => console.log('Done'))
+    .catch(err => console.trace(err.stack))
+});
+
+s
 var files;
 function filesWithPatterns (filesPatterns) {
     if(!files){
@@ -64,6 +113,16 @@ async function transpileJS(){
         })
         .array;
 };
+
+async function serverStart() {
+    await serverProcess.start();
+}
+
+async function serverRestart() {
+    await serverProcess.stop()
+    await serverProcess.start();
+
+}
 
 async function mkdirAll(dir) {
   const elems = dir.split(path.delimiter);
