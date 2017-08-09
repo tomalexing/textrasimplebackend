@@ -9,40 +9,9 @@ import {production, escapeJSONString} from './utils.js';
 
 const app = express();
 const port = 9000;
-var router = express.Router();
+var admin = express.Router();
 app.disable('x-powered-by');
 // we need link   
-
-router.param('user_id', function(req, res, next, id) {
-  // sample user, would actually fetch from DB, etc...
-  req.user = {
-    id: id,
-    name: 'TJ'
-  };
-  next();
-});
-
-router.route('/users/:user_id')
-.all(function(req, res, next) {
-  // runs for all HTTP verbs first
-  // think of it as route specific middleware!
-  next();
-})
-.get(function(req, res, next) {
-  res.json(req.user);
-})
-.put(function(req, res, next) {
-  // just an example of maybe updating the user
-  req.user.name = req.params.name;
-  // save user ... etc
-  res.json(req.user);
-})
-.post(function(req, res, next) {
-  next(new Error('not implemented'));
-})
-.delete(function(req, res, next) {
-  next(new Error('not implemented'));
-});
 var avatar, UsersList1, UsersList2;
   try{
       (async () => {
@@ -268,32 +237,43 @@ var avatar, UsersList1, UsersList2;
             }
         ];
       })()
-      }catch(err){
+  }
+  catch(err){
         err => console.trace(err.stack)
   }
 
-app.use((req,res,next) => {
-  console.log('req '+ req.originalUrl +' at '+ (new Date).toISOString());
-  next();
-})
-app.use( 
+admin.use(bodyParser.json());
+admin.use(bodyParser.urlencoded({
+  extended: true
+}))
+
+admin.post('/user', function(req, res) {
+  res.json({
+    id: req.body.id,
+    value: JSON.stringify(UsersList1.find(o => o.uuid === req.body.id))
+  });
+});
+
+
+
+app.use(
   gzipStatic(__dirname + '/assets',{
     maxAge: production? 1000 * 60 * 60 * 24 * 365 : 0
   })
 )
 
 
-app.get('/check', (req, res) => res.send('OK'));
+admin.get('/check', (req, res) => res.send('OK'));
 
-app.get('/users', (req, res)=>{
+admin.get('/users', (req, res)=>{
   res.send(JSON.stringify(UsersList1))
 })
 
-// router.get('/appeals', (req, res)=>{
-//   res.send(JSON.stringify(UsersList2))
-// })
-app.use(router);
-app.use(bodyParser.json());
+admin.get('/appeals', (req, res)=>{
+  res.send(JSON.stringify(UsersList2))
+})
+
+app.use('/admin', admin);
 app.listen(port, () => {
   console.log(`Server running on port ${port}, version:${VERSION}`);
 }); 
