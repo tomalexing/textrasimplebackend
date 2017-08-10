@@ -241,7 +241,7 @@ var avatar, UsersList1, UsersList2;
   catch(err){
         err => console.trace(err.stack)
   }
-
+app.use('/', (req, _, next) => {console.log(req.originalUrl); next()});
 admin.use(bodyParser.json());
 admin.use(bodyParser.urlencoded({
   extended: true
@@ -250,7 +250,7 @@ admin.use(bodyParser.urlencoded({
 admin.post('/user', function(req, res) {
   res.json({
     id: req.body.id,
-    value: JSON.stringify(UsersList1.find(o => o.uuid === req.body.id))
+    value: UsersList1.find(o => o.uuid === req.body.id)
   });
 });
 
@@ -266,7 +266,7 @@ app.use(
 admin.get('/check', (req, res) => res.send('OK'));
 
 admin.get('/users', (req, res)=>{
-  res.send(JSON.stringify(UsersList1))
+  res.send(JSON.stringify(UsersList1.map(o => o.uuid)))
 })
 
 admin.get('/appeals', (req, res)=>{

@@ -1,6 +1,6 @@
 {
   "name": "textraserver",
-  "version": "1.0.33",
+  "version": "1.0.35",
   "description": "SFT",
   "main": "src/index.js",
   "repository": {},
