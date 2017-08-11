@@ -12,7 +12,7 @@ const port = 9000;
 var admin = express.Router();
 app.disable('x-powered-by');
 // we need link   
-var avatar, UsersList1, UsersList2;
+var avatar, UsersList1, UsersList2, HistoryUsers, MessagefForHistory;
   try{
       (async () => {
         avatar =  await fs.readFile(__dirname + '/assets/9631913.jpeg' );
@@ -33,7 +33,8 @@ var avatar, UsersList1, UsersList2;
             from: "RUS",
             to: "ENG",
             cost: "$0.33",
-            isPersonal: false
+            isPersonal: false,
+            historyId: 'sadsdasdasd'
           },
           {
             uuid: "lkhgghk",
@@ -51,7 +52,8 @@ var avatar, UsersList1, UsersList2;
             from: "ENG",
             to: "CHN",
             cost: "$11.33",
-            isPersonal: true
+            isPersonal: true,
+            historyId: 'qqqqqqqq'
           },
           {
             uuid: "vnbmnbmhg",
@@ -69,7 +71,8 @@ var avatar, UsersList1, UsersList2;
             from: "RUS",
             to: "ENG",
             cost: "$0.33",
-            isPersonal: false
+            isPersonal: false,
+            historyId: '222222222'
           },
           {
             uuid: "bertu",
@@ -87,7 +90,8 @@ var avatar, UsersList1, UsersList2;
             from: "ENG",
             to: "CHN",
             cost: "$11.33",
-            isPersonal: true
+            isPersonal: true,
+            historyId: 'rrrrrrrrrr'
           },
           {
             uuid: "wasdffeq",
@@ -105,7 +109,8 @@ var avatar, UsersList1, UsersList2;
             from: "RUS",
             to: "ENG",
             cost: "$0.33",
-            isPersonal: false
+            isPersonal: false,
+            historyId: 'tyyyyyyyyyyy'
           },
           {
             uuid: "wasgfasrq",
@@ -123,12 +128,13 @@ var avatar, UsersList1, UsersList2;
             from: "ENG",
             to: "CHN",
             cost: "$11.33",
-            isPersonal: true
+            isPersonal: true,
+            historyId: 'ddddddsasdad'
           }
         ];
         UsersList2 = [
             {
-              uuid: "qwerqwerqwer",
+              uuid: "mnbbmbn",
               nickname: "aaaa",
               type: 'g',
               email: 'nickmy@yandex.ru',
@@ -146,7 +152,7 @@ var avatar, UsersList1, UsersList2;
               isPersonal: false
             },
             {
-              uuid: "lkhgghk",
+              uuid: "iurtiurt",
               nickname: "zfdfsddf",
               email: 'helpme@yandex.ru',
               avatar: avatar,
@@ -164,7 +170,7 @@ var avatar, UsersList1, UsersList2;
               isPersonal: true
             },
             {
-              uuid: "vnbmnbmhg",
+              uuid: "fhgjmfhgm",
               nickname: "alex",
               email: 'yiyiyiyi@mail.ru',
               avatar: avatar,
@@ -182,7 +188,7 @@ var avatar, UsersList1, UsersList2;
               isPersonal: false
             },
             {
-              uuid: "bertu",
+              uuid: "wreyhdfc",
               nickname: "rgsgfgsa",
               email: 'yiyiyiyi@mail.ru',
               avatar: avatar,
@@ -200,7 +206,7 @@ var avatar, UsersList1, UsersList2;
               isPersonal: true
             },
             {
-              uuid: "wasdffeq",
+              uuid: "rjtygdbd",
               nickname: "bfsbs",
               email: 'dsgsgsgdg@mail.ru',
               avatar: avatar,
@@ -218,7 +224,7 @@ var avatar, UsersList1, UsersList2;
               isPersonal: false
             },
             {
-              uuid: "wasgfasrq",
+              uuid: "yhnyhnyhn",
               nickname: "asdasdas",
               email: 'mtnbvcx@mail.ru',
               avatar: avatar,
@@ -236,12 +242,97 @@ var avatar, UsersList1, UsersList2;
               isPersonal: true
             }
         ];
+        HistoryUsers = [
+          {
+            uuid: "alex",
+            nickname: "alex",
+            avatar: avatar,
+            title: "Создать запрос на перевод",
+            content: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
+            contentFull: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
+            opened: false,
+            publishTime: new Date(new Date() - 100000).toISOString(),
+            startWorkingTime: new Date().toISOString(),
+            duration: 24441,
+            letterNumber: 213,
+            startTime: "12:32",
+            from: "RUS",
+            to: "ENG",
+            cost: "$0.33",
+            postType: 'post'
+          },
+          {
+            uuid: "alex_alex",
+            nickname: "alex_alex",
+            avatar: avatar,
+            title: "Создать запрос на перевод",
+            content: "Создать запрос на перевод",
+            contentFull: "Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d",
+            publishTime: new Date(new Date() - 100000).toISOString(),
+            startWorkingTime: new Date(new Date() - 100000).toISOString(),
+            duration: 634,
+            startTime: "12:32",
+            letterNumber: 213,
+            opened: false,
+            from: "ENG",
+            to: "CHN",
+            cost: "$11.33",
+            postType: 'reply'
+          }
+        ];
+        MessagefForHistory = [
+          {
+            uuid: "alex",
+            nickname: "alex",
+            avatar: avatar,
+            title: "Создать запрос на перевод",
+            content: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
+            contentFull: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
+            opened: false,
+            publishTime: new Date(new Date() - 100000).toISOString(),
+            startWorkingTime: new Date().toISOString(),
+            duration: 24441,
+            letterNumber: 213,
+            startTime: "12:32",
+            from: "RUS",
+            to: "ENG",
+            cost: "$0.33",
+            postType: 'post'
+          },
+          {
+            uuid: "alex_alex",
+            nickname: "alex_alex",
+            avatar: avatar,
+            title: "Создать запрос на перевод",
+            content: "Создать запрос на перевод",
+            contentFull: "Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d",
+            publishTime: new Date(new Date() - 100000).toISOString(),
+            startWorkingTime: new Date(new Date() - 100000).toISOString(),
+            duration: 634,
+            startTime: "12:32",
+            letterNumber: 213,
+            opened: false,
+            from: "ENG",
+            to: "CHN",
+            cost: "$11.33",
+            postType: 'reply'
+          }
+        ];
       })()
   }
   catch(err){
         err => console.trace(err.stack)
   }
 app.use('/', (req, _, next) => {console.log(req.originalUrl); next()});
+app.use(
+  gzipStatic(__dirname + '/assets',{
+    maxAge: production? 1000 * 60 * 60 * 24 * 365 : 0
+  })
+)
+
+
+
+// Admin routers
 admin.use(bodyParser.json());
 admin.use(bodyParser.urlencoded({
   extended: true
@@ -254,14 +345,12 @@ admin.post('/user', function(req, res) {
   });
 });
 
-
-
-app.use(
-  gzipStatic(__dirname + '/assets',{
-    maxAge: production? 1000 * 60 * 60 * 24 * 365 : 0
-  })
-)
-
+admin.post('/appeal', function(req, res) {
+  res.json({
+    id: req.body.id,
+    value: UsersList2.find(o => o.uuid === req.body.id)
+  });
+});
 
 admin.get('/check', (req, res) => res.send('OK'));
 
@@ -269,8 +358,27 @@ admin.get('/users', (req, res)=>{
   res.send(JSON.stringify(UsersList1.map(o => o.uuid)))
 })
 
+admin.get('/history', (req, res)=>{
+  res.send(JSON.stringify(UsersList1.map(o => o.historyId)))
+})
+
+admin.post('/getroom', function(req, res) {
+  res.json({
+    id: req.body.id,
+    value: HistoryUsers
+  });
+});
+
+admin.post('/getmessagesroom', function(req, res) {
+  res.json({
+    id: req.body.id,
+    value: MessagefForHistory
+  });
+});
+
+
 admin.get('/appeals', (req, res)=>{
-  res.send(JSON.stringify(UsersList2))
+  res.send(JSON.stringify(UsersList2.map(o => o.uuid)))
 })
 
 app.use('/admin', admin);
