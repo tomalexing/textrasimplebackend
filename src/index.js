@@ -12,7 +12,7 @@ const port = 9000;
 var admin = express.Router();
 app.disable('x-powered-by');
 // we need link   
-var avatar, UsersList1, UsersList2, HistoryUsers, MessagefForHistory;
+var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
   try{
       (async () => {
         avatar =  await fs.readFile(__dirname + '/assets/9631913.jpeg' );
@@ -242,45 +242,27 @@ var avatar, UsersList1, UsersList2, HistoryUsers, MessagefForHistory;
               isPersonal: true
             }
         ];
-        HistoryUsers = [
+        HistoryUsers = 
           {
-            uuid: "alex",
-            nickname: "alex",
-            avatar: avatar,
-            title: "Создать запрос на перевод",
-            content: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
-            contentFull: "Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d",
-            opened: false,
-            publishTime: new Date(new Date() - 100000).toISOString(),
-            startWorkingTime: new Date().toISOString(),
-            duration: 24441,
-            letterNumber: 213,
-            startTime: "12:32",
-            from: "RUS",
-            to: "ENG",
-            cost: "$0.33",
-            postType: 'post'
-          },
-          {
-            uuid: "alex_alex",
-            nickname: "alex_alex",
-            avatar: avatar,
-            title: "Создать запрос на перевод",
-            content: "Создать запрос на перевод",
-            contentFull: "Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d",
-            publishTime: new Date(new Date() - 100000).toISOString(),
-            startWorkingTime: new Date(new Date() - 100000).toISOString(),
-            duration: 634,
-            startTime: "12:32",
-            letterNumber: 213,
-            opened: false,
-            from: "ENG",
-            to: "CHN",
-            cost: "$11.33",
-            postType: 'reply'
+              uuid: "yhnyhnyhn",
+              nickname: "asdasdas",
+              email: 'mtnbvcx@mail.ru',
+              avatar: avatar,
+              type: 'g',
+              title: "Создать запрос на перевод",
+              content: "Создать запрос на перевод",
+              publishTime: new Date().toISOString(),
+              startWorkingTime: new Date().toISOString(),
+              registrationTime: new Date(new Date() - 1000000),
+              duration: 431241,
+              letterNumber: 123,
+              from: "ENG",
+              to: "CHN",
+              cost: "$11.33",
+              isPersonal: true
           }
-        ];
-        MessagefForHistory = [
+        ;
+        MessageForHistory = [
           {
             uuid: "alex",
             nickname: "alex",
@@ -348,7 +330,7 @@ admin.post('/user', function(req, res) {
 admin.post('/appeal', function(req, res) {
   res.json({
     id: req.body.id,
-    value: UsersList2.find(o => o.uuid === req.body.id)
+    value: UsersList2
   });
 });
 
@@ -372,7 +354,7 @@ admin.post('/getroom', function(req, res) {
 admin.post('/getmessagesroom', function(req, res) {
   res.json({
     id: req.body.id,
-    value: MessagefForHistory
+    value: MessageForHistory
   });
 });
 
