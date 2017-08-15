@@ -9,7 +9,9 @@ import {production, escapeJSONString} from './utils.js';
 
 const app = express();
 const port = 9000;
-var admin = express.Router();
+var admin = express.Router(),
+    user = express.Router();
+
 app.disable('x-powered-by');
 // we need link   
 var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
@@ -242,7 +244,7 @@ var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
               isPersonal: true
             }
         ];
-        HistoryUsers = 
+        HistoryUsers = [
           {
               uuid: "yhnyhnyhn",
               nickname: "asdasdas",
@@ -260,7 +262,25 @@ var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
               to: "CHN",
               cost: "$11.33",
               isPersonal: true
-          }
+          },
+          {
+              uuid: "ccccdcdcdcddxc",
+              nickname: "asdasdas",
+              email: 'mtnbvcx@mail.ru',
+              avatar: avatar,
+              type: 'g',
+              title: "Создать запрос на перевод",
+              content: "Создать запрос на перевод",
+              publishTime: new Date().toISOString(),
+              startWorkingTime: new Date().toISOString(),
+              registrationTime: new Date(new Date() - 1000000),
+              duration: 431241,
+              letterNumber: 123,
+              from: "ENG",
+              to: "CHN",
+              cost: "$11.33",
+              isPersonal: true
+          }]
         ;
         MessageForHistory = [
           {
@@ -305,14 +325,12 @@ var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
   catch(err){
         err => console.trace(err.stack)
   }
-app.use('/', (req, _, next) => {console.log(req.originalUrl); next()});
+app.use('/', (req, _, next) => {console.log(req.method + ': ' + req.originalUrl); next()});
 app.use(
   gzipStatic(__dirname + '/assets',{
     maxAge: production? 1000 * 60 * 60 * 24 * 365 : 0
   })
 )
-
-
 
 // Admin routers
 admin.use(bodyParser.json());
@@ -326,6 +344,7 @@ admin.post('/user', function(req, res) {
     value: UsersList1.find(o => o.uuid === req.body.id)
   });
 });
+
 
 admin.post('/appeal', function(req, res) {
   res.json({
@@ -344,14 +363,22 @@ admin.get('/history', (req, res)=>{
   res.send(JSON.stringify(UsersList1.map(o => o.historyId)))
 })
 
-admin.post('/getroom', function(req, res) {
+admin.post('/historyrooms', function(req, res) {
   res.json({
     id: req.body.id,
-    value: HistoryUsers
+    value: ['yhnyhnyhn', 'ccccdcdcdcddxc']
   });
 });
 
-admin.post('/getmessagesroom', function(req, res) {
+admin.post('/historyroom', function(req, res) {
+  res.json({
+    id: req.body.id,
+    value: HistoryUsers.find(o => o.uuid === req.body.id)
+  });
+});
+
+
+admin.post('/historymassage', function(req, res) {
   res.json({
     id: req.body.id,
     value: MessageForHistory
@@ -363,7 +390,82 @@ admin.get('/appeals', (req, res)=>{
   res.send(JSON.stringify(UsersList2.map(o => o.uuid)))
 })
 
+const Searching = [
+  {
+    uuid: 'wqefeq',
+    avatar: avatar,
+    title: 'Создать запрос на перевод',
+    content: 'Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d',
+    publishTime: (new Date).toISOString(),
+    startWorkingTime: (new Date(new Date - 1000000)).toISOString(),
+    duration: 1341,
+    letterNumber: 213,
+    from: 'RUS',
+    to: 'ENG',
+    cost: '$0.33'
+  },
+  {
+    uuid: 'wqerq',
+    avatar: avatar,
+    title: 'Создать запрос на перевод',
+    content: 'Создать запрос на перевод',
+    publishTime: (new Date).toISOString(),
+    startWorkingTime: (new Date).toISOString(),
+    duration: 431241,
+    letterNumber: 123,
+    from: 'ENG',
+    to: 'CHN',
+    cost: '$11.33'
+  }
+]
+const Users = {
+  'wqefeq': {
+    uuid: 'alex',
+    nickname: 'alex',
+    avatar: avatar,
+    title: 'Создать запрос на перевод',
+    content: 'Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d',
+    contentFull: 'Создать запрос на перевод Создать запросна переводСоздать запроснапереводСоздать запросна d',
+    opened: false,
+    publishTime: (new Date(new Date - 100000)).toISOString(),
+    startWorkingTime: (new Date).toISOString(),
+    duration: 241,
+    letterNumber: 213,
+    startTime: '12:32',
+    from: 'RUS',
+    to: 'ENG',
+    cost: '$0.33'
+  }, 
+  'wqerq': {
+    uuid: 'alex_alex',
+    nickname: 'alex_alex',
+    avatar: avatar,
+    title: 'Создать запрос на перевод',
+    content: 'Создать запрос на перевод',
+    contentFull: 'ффффффСоздать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d Создать запрос на перевод Создатьзапросна переводСоздать запроснапереводСоздать запросна d',
+    publishTime: (new Date(new Date - 100000)).toISOString(),
+    startWorkingTime: (new Date(new Date - 100000)).toISOString(),
+    duration: 634,
+    startTime: '12:32',
+    letterNumber: 213,
+    opened: false,
+    from: 'ENG',
+    to: 'CHN',
+    cost: '$11.33'
+  }
+}
+
+
+// user routers
+user.use(bodyParser.json());
+user.use(bodyParser.urlencoded({
+  extended: true
+}))
+user.get('/mylist', (req, res) => {
+   res.send(JSON.stringify(Searching.map(o => o.uuid)))
+})
 app.use('/admin', admin);
+app.use('/dashboard', user);
 app.listen(port, () => {
   console.log(`Server running on port ${port}, version:${VERSION}`);
 }); 
