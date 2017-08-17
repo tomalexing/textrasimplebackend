@@ -69,7 +69,6 @@ chokidar.watch(`${paths.serverScripts.src}/index.js`, {ignored: /[\/\\]\./}).on(
     .catch(err => console.trace(err.stack))
 });
 
-s
 var files;
 function filesWithPatterns (filesPatterns) {
     if(!files){

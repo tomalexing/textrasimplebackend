@@ -1,6 +1,6 @@
 {
   "name": "textraserver",
-  "version": "1.0.37",
+  "version": "1.0.42",
   "description": "SFT",
   "main": "src/index.js",
   "repository": {},
@@ -28,7 +28,8 @@
     "mz": "^2.6.0",
     "npm-watch": "^0.2.0",
     "path": "^0.12.7",
-    "respawn": "^2.5.0"
+    "respawn": "^2.5.0",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -42,6 +43,7 @@
     "babel-preset-latest": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
+    "cors": "^2.8.4",
     "nodemon": "^1.11.0",
     "parallelshell": "^3.0.1"
   }

@@ -6,11 +6,30 @@ import bodyParser from 'body-parser';
 import fs from 'mz/fs';
 import gzipStatic from 'connect-gzip-static';
 import {production, escapeJSONString} from './utils.js';
-
+import cors from 'cors';
+import url from 'url';
+import http from "http";
 const app = express();
 const port = 9000;
 var admin = express.Router(),
     user = express.Router();
+    
+var corsOptions = {
+  origin: (origin, cb) => {
+    if (!origin) {
+      cb(null, false);
+      return;
+    }
+    const u = url.parse(origin);
+    cb(null, u.hostname == 'localhost' || u.hostname == '127.0.0.1');
+  },
+  maxAge: 60 * 60 * 24,
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}
+
+app.use(cors(corsOptions));
+admin.use(cors(corsOptions));
 
 app.disable('x-powered-by');
 // we need link   
@@ -325,7 +344,10 @@ var avatar, UsersList1, UsersList2, HistoryUsers, MessageForHistory;
   catch(err){
         err => console.trace(err.stack)
   }
-app.use('/', (req, _, next) => {console.log(req.method + ': ' + req.originalUrl); next()});
+app.use('/', (req, res, next) => {
+  console.log(req.method + ': ' + req.originalUrl); 
+  next()
+});
 app.use(
   gzipStatic(__dirname + '/assets',{
     maxAge: production? 1000 * 60 * 60 * 24 * 365 : 0
@@ -364,6 +386,7 @@ admin.get('/history', (req, res)=>{
 })
 
 admin.post('/historyrooms', function(req, res) {
+
   res.json({
     id: req.body.id,
     value: ['yhnyhnyhn', 'ccccdcdcdcddxc']
@@ -454,7 +477,37 @@ const Users = {
     cost: '$11.33'
   }
 }
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}))
 
+app.post('*',(request, response) => {
+    var options = {
+      "method": "POST",
+      "hostname": "api-textra.iondigi.com",
+      "port": "80",
+      "path": request.originalUrl,
+      "headers": {
+        "content-type": "application/json",
+        "cache-control": "no-cache",  }
+    };
+
+  var req = http.request(options, function (res) {
+    var chunks = [];
+
+    res.on("data", function (chunk) {
+      chunks.push(chunk);
+    });
+
+    res.on("end", function () {
+      var body = Buffer.concat(chunks);
+      response.json(body.toString());
+    });
+  });
+  req.write(JSON.stringify(request.body));
+  req.end();
+})
 
 // user routers
 user.use(bodyParser.json());
@@ -469,3 +522,5 @@ app.use('/dashboard', user);
 app.listen(port, () => {
   console.log(`Server running on port ${port}, version:${VERSION}`);
 }); 
+
+
