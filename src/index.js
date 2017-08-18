@@ -24,7 +24,7 @@ var corsOptions = {
     cb(null, u.hostname == 'localhost' || u.hostname == '127.0.0.1');
   },
   maxAge: 60 * 60 * 24,
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type','Authorization'],
   credentials: true
 }
 
@@ -482,7 +482,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-app.post('*',(request, response) => {
+app.all('*',(request, response, next) => {
     var options = {
       "method": "POST",
       "hostname": "api-textra.iondigi.com",
@@ -503,10 +503,12 @@ app.post('*',(request, response) => {
     res.on("end", function () {
       var body = Buffer.concat(chunks);
       response.json(body.toString());
+      next();
     });
   });
   req.write(JSON.stringify(request.body));
   req.end();
+  
 })
 
 // user routers
