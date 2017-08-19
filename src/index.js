@@ -482,15 +482,17 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 
-app.all('*',(request, response, next) => {
+app.all('*', (request, response, next) => {
+
     var options = {
-      "method": "POST",
+      "method": request.method,
       "hostname": "api-textra.iondigi.com",
       "port": "80",
       "path": request.originalUrl,
       "headers": {
         "content-type": "application/json",
-        "cache-control": "no-cache",  }
+        "cache-control": "no-cache", 
+        "Authorization": request.get('Authorization') || '' }
     };
 
   var req = http.request(options, function (res) {
@@ -502,7 +504,7 @@ app.all('*',(request, response, next) => {
 
     res.on("end", function () {
       var body = Buffer.concat(chunks);
-      response.json(body.toString());
+      response.send(body);
       next();
     });
   });
